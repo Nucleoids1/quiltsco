@@ -1,0 +1,9 @@
+# Ignored Files
+.*/
+error.log
+data/
+include/config.php
+logs/
+temp/
+website/.well-known/
+website/temp/
