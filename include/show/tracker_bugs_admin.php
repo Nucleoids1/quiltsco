@@ -5,6 +5,8 @@ $GLOBALS['highlight'] = 'home';
 
 $trackerLanguage = language();
 $trackerLanguageSuffix = $trackerLanguage === 'french' ? 'french' : 'english';
+$_id = getInt('i');
+$_page = getInt('p', 1);
 
 if ($_id) {
     $trackerBugsRow = (new \Databases\TrackerBugs())->findById($_id);

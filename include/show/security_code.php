@@ -40,7 +40,7 @@ function apendLetter($handle, $letter)
 {
     global $currentX;
     $gitter = 40 + (mt_rand(-3, 3));
-    $font = '../include/fonts/dirtyheadline.ttf';
+    $font = __DIR__ . '/../fonts/dirtyheadline.ttf';
     $color = imagecolorallocate($handle, mt_rand(0, 200), mt_rand(0, 200), mt_rand(0, 200));
     imagettftext($handle, 32, mt_rand(-10, 10), $currentX, $gitter, $color, $font, $letter);
     $currentX += 20 + mt_rand(-2, 6);

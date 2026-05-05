@@ -4,6 +4,14 @@ function boxOutsideTop($title = '', $options = '', $width = '', $styleTitle = ''
     $defaultTitle = '';
     $defaultOptions = '';
     $defaultMain = '';
+    if ($options) {
+        $options = preg_replace_callback('/<a\b([^>]*)>/i', function ($matches) {
+            if (preg_match('/\s(class|style|onMouseOver|onMouseOut)\s*=/i', $matches[1])) {
+                return $matches[0];
+            }
+            return '<a class="outside_options_link" onMouseOver="this.className=\'outside_options_link_hover\';" onMouseOut="this.className=\'outside_options_link\';"' . $matches[1] . '>';
+        }, $options);
+    }
     if ($width == '') {
         if ($options) {
             $width = '50%';
@@ -86,23 +94,25 @@ function overwriteStyle($default, $overwrite)
     return $default;
 }
 
-function makeLink($actionUrl = '', $title = '', $class = '', $onclick = '')
-{
-    return '<a href="' . $actionUrl . '"'
-        . ($class ? ' class="' . $class . '"' : '')
-        . ($onclick ? ' onClick="' . $onclick . '"' : '')
-        . '>' . $title . '</a>';
-}
-
 function makeButton($title = '', $href = '', $id = '', $div = '')
 {
     return '<div class="' . $id . '" style="border-width: 2px; border-style: solid; cursor: pointer; font-size: 1.05rem; font-weight: bold; padding: 7px 15px 7px 15px; text-align: center; border-radius: 17px 17px 17px 17px;" onClick="document.location=\'' . $href . '\';" onMouseOver="this.className=\'' . $id . '_hover\';' . ($div ? ' if (undefined !== window.startme) { show_div(\'' . $div . '\') };' : '') . '" onMouseOut="this.className=\'' . $id . '\';">' . $title . '</div>';
 }
 
-function makePostLink($actionUrl, $title, $confirmMessage = '')
+function makeLink($actionUrl = '', $title = '', $class = '', $onclick = '')
+{
+    return '<a href="' . $actionUrl . '"'
+        . ($class ? ' class="' . $class . '"' : '')
+        . ($onclick ? ' onClick="' . $onclick . '"' : '')
+        . ($class ? ' onMouseOver="this.className=\'' . $class . '_hover\';" onMouseOut="this.className=\'' . $class . '\';"' : '')
+        . '>' . $title . '</a>';
+}
+
+function makePostLink($actionUrl, $title, $confirmMessage = '', $buttonStyle = '')
 {
     $confirmJs = $confirmMessage ? 'if (!confirm(' . safeJs($confirmMessage) . ')) { return false; } ' : '';
     $style = $buttonStyle ? $buttonStyle : 'text-decoration: underline; cursor: pointer;';
+    $classAttr = $buttonStyle ? '' : ' class="action_post_link"';
     $onclick = $confirmJs . 'this.closest(\'form\').submit(); return false;';
     return '<form action="' . safeUrl($actionUrl) . '" method="post" style="display: inline; margin: 0;">'
         . csrfField()

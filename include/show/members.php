@@ -11,9 +11,10 @@ include('../include/parts/header.php');
 
 if (!$_display) {
     $_display = 'all';
-} elseif (!(ord($_display) >= 65 && ord($_display) <= 90) && !(ord($_display) >= 97 && ord($_display) <= 122)) {
+} elseif ($_display !== 'all' && !preg_match('/^[A-Za-z]$/', $_display)) {
     $_display = 'all';
 }
+$_display = strtolower($_display);
 if ($_display == 'all') {
     $imageCount = (new \Databases\Members())->countAll();
 } else {
